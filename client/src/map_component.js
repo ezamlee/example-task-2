@@ -2,6 +2,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Moment from 'moment'
 
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++)  color += letters[Math.floor(Math.random() * 16)];
+  return color;
+}
+
 const getRouteSummary = (locations) => {
   const to = Moment(locations[0].time).format('hh:mm DD.MM')
   const from = Moment(locations[locations.length - 1].time).format('hh:mm DD.MM')
@@ -28,7 +35,7 @@ const MapComponent = () => {
     const attribution = 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
     const osm = new L.TileLayer(osmUrl, {
       minZoom: 8,
-      maxZoom: 12,
+      maxZoom: 18,
       attribution
     })
     map.current.setView(new L.LatLng(52.51, 13.40), 9)
@@ -40,11 +47,14 @@ const MapComponent = () => {
       return // If map or locations not loaded yet.
     }
     // TODO(Task 1): Replace the single red polyline by the different segments on the map.
-    const latlons = locations.map(({ lat, lon }) => [lat, lon])
-    const polyline = L.polyline(latlons, { color: 'red' }).bindPopup(getRouteSummary(locations)).addTo(map.current)
-    map.current.fitBounds(polyline.getBounds())
-    return () => map.current.remove(polyline)
-  }, [locations, map.current])
+     locations.map((loc) => {
+      const latlons = loc.map(({ lat, lon }) => [lat, lon])
+      const polyline = L.polyline(latlons, { color: getRandomColor() }).bindPopup(getRouteSummary(loc)).addTo(map.current)
+      map.current.fitBounds(polyline.getBounds())
+      return () => map.current.remove(polyline)
+    })
+  }, [locations, map.current] )
+
   // TODO(Task 2): Display location that the back-end returned on the map as a marker.
 
   return (

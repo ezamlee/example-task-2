@@ -7,7 +7,7 @@ const Index = () => {
   return (
     <div>
       <div className='header'>
-        <h1>Welcome to the example task!</h1>
+        {/* <h1>Welcome to the example task!</h1> */}
       </div>
       {/* TODO(Task 2): Add a slider to select datetime in the past.
         Pass the selected value as prop to the MapContainer */ }
