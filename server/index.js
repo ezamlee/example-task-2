@@ -1,5 +1,7 @@
 const express = require('express')
 const app = express()
+
+// the accuracy of chuncking the array , per day , per month , per year etc..
 const splitIndex = 13;
 
 
@@ -11,6 +13,8 @@ app.use((_req, res, next) => {
 
 const exampleData = require('../data/tracking.json')
 
+
+// this function split array into small chunks of array based on accuracy pre-defined
 function chunckData() {
   let data = {}
   exampleData.map((item) => {
@@ -28,8 +32,8 @@ app.get('/', (_req, res) => {
 })
 
 app.get('/location/:when', (req, res) => {
-  // TODO(Task 2): Return the tracking data closest to `req.params.when` from `exampleData`.
   
+  // filter the element where the time reterieved is more then time requested and return first element to return the latest approx location.
   const {lon,lat} =  exampleData.filter( (item) => ! ( new Date(item.time) > new Date(parseInt(req.params.when)) ))[0]
   
   res.send([lat,lon])
